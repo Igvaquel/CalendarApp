@@ -10,17 +10,34 @@ import { localizer } from '../../helpers'
 import { getMessagesES } from '../../helpers/getMessages'
 
 import { CalendarEvent, CalendarModal, FabAddNew, FabDelete, Navbar } from "../"
-import { useUiStore,useCalendarStore } from '../../hooks'
+import { useUiStore,useCalendarStore, useAuthStore } from '../../hooks'
+import { useEffect } from 'react'
 
 
 
 export const CalendarPage = () => {
 
+  const { user } = useAuthStore();
   const { openDateModal } = useUiStore();
-  const { events, setActiveEvent } = useCalendarStore();
+  const { events, setActiveEvent, startLoadingEvent } = useCalendarStore();
   const [lastView, setLastView] = useState( localStorage.getItem('lastView') || 'week');
 
-  const eventStyleGetter = ( event, start, end, isSelected ) => {}
+  const eventStyleGetter = ( event, start, end, isSelected ) => {
+
+    const isMyEvent = ( user.payload.uid === event.user._id ) || ( user.payload.uid === event.user.uid );
+
+    console.log(isMyEvent);
+    const style = {
+      backgroundColor: isMyEvent ? '#347CF7' : '#575d61',
+      borderRadius: '0px',
+      opacity: 0.9,
+      color: 'white'
+    }
+
+    return {
+      style
+    }
+  }
 
   const onDoubleClick = ( event ) => {
     openDateModal();
@@ -32,6 +49,11 @@ export const CalendarPage = () => {
     localStorage.setItem('lastView', event);
     setLastView( event )
   }
+
+  useEffect(() => {
+    startLoadingEvent()
+  }, [])
+  
 
   return (
     <>

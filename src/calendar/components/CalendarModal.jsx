@@ -69,8 +69,7 @@ export const CalendarModal = () => {
         })
     }
 
-    const onSubmit = async( event ) => {
-        event.preventDefault();
+    const onSubmit = async() => {
         setFormSubmitted(true);
         const difference = differenceInSeconds( formValues.end, formValues.start );
 
