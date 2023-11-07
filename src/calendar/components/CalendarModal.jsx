@@ -10,6 +10,7 @@ import "react-datepicker/dist/react-datepicker.css";
 
 import { useUiStore } from '../../hooks/useUiStore';
 import { useCalendarStore } from '../../hooks';
+import { getEnvVariables } from '../../helpers';
 
 const customStyles = {
     content: {
@@ -22,7 +23,9 @@ const customStyles = {
     },
 };
 
-Modal.setAppElement('#root');
+if( getEnvVariables().VITE_MODE !== 'test') {
+    Modal.setAppElement('#root');
+}
 
 export const CalendarModal = () => {
 
